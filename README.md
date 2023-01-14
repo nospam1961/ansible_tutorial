@@ -4,6 +4,14 @@
 - [Learn Linux TV - Getting started with Ansible](https://www.youtube.com/playlist?list=PLT98CRl2KxKEUHie1m24-wkyHpEsa4Y70)
 
 
+## Starting with 3 Ubuntu servers and workstation (via  WSL2) - DNS names can be replaced with IP addresses
+```
+homelab-01
+homelab-02
+homelab-03
+```
+
+
 ## Create SSH keys
 *Generate with Passphrase*
 
@@ -77,4 +85,43 @@ or
 `$ ansible all -m gather_facts --limit homelab-02`
 
 
+## Running commands on the remote boxes
 
+### Run apt update on the remote servers as sudo (on debian based )
+```
+- -m -> module
+- -a -> argument
+- --become -> run as sudo user (elevate privileges)
+- --ask-become-pass -> prompt for the password (sudo password on workstation and servers should be the same)
+```
+
+`$ ansible all -m apt -a update_cache=yes --become --ask-become-pass`
+
+### Install package on all remote servers
+
+`$ ansible all -m apt -a name=vim-nox --become --ask-become-pass`
+
+`$ ansible all -m apt -a name=tmux --become --ask-become-pass`
+
+### Check existence of the package on remote
+
+`$ apt search vim-nox`
+
+### Log of apt on remote
+
+`$ cat /var/log/apt/history.log`
+
+### Upgrade package
+
+** This shows that package is installed previously (green output with "SUCCESS") **
+
+`ansible all -m apt -a name=ssh --become --ask-become-pass`
+
+** Upgrade the package to the latest by passing another argument**
+
+`ansible all -m apt -a "name=ssh state=latest" --become --ask-become-pass`
+
+
+## Upgrade to latest distribution all packages on the remotes
+
+`ansible all -m apt -a "upgrade=dist" --become --ask-become-pass`
