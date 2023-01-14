@@ -122,6 +122,13 @@ or
 `ansible all -m apt -a "name=ssh state=latest" --become --ask-become-pass`
 
 
-## Upgrade to latest distribution all packages on the remotes
+### Upgrade to latest distribution all packages on the remotes
 
 `ansible all -m apt -a "upgrade=dist" --become --ask-become-pass`
+
+
+## First Playbook
+
+### Install apache2 package
+
+`$ ansible-playbook --ask-become-pass install_apache.yml`
