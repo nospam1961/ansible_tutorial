@@ -159,3 +159,28 @@ when: ansible_distribution == "CentOS"
 when: ansible_distribution == ["Debian", "Ubuntu"]
 ```
 
+## Using generic `package` module instead of distribution specific.
+### Variables can be specified in inventory for each host.
+
+```
+  - name: Install apache and php package
+    package:
+      name:
+        - "{{ apache_package }}"
+        - "{{ php_package }}"
+      state: latest
+      update_cache: yes
+```
+
+
+## CentOS Minimal Notes
+
+### Minimal install of CentOS 7 missing `dnf` and some other packages
+
+`$ sudo yum install dnf epel-release ansible`
+
+### Minimal install of CentOS 7 does not start apache automatically and needs firewall rule to open port 80
+
+`$ sudo systemctl start httpd`
+
+`$ sudo firewall-cmd --add-port=80/tcp`
