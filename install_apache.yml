@@ -7,26 +7,53 @@
   become: yes
 
   # Disable (false) or enable (default) gathering facts
-  gather_facts: false
+  gather_facts: true
 
   # Tasks to run
   tasks:
 
-  - name: Update repository index
+  - name: Update repository index (apt)
     apt:
       # Similar to apt update
       update_cache: yes
+    # Only run on "Ubuntu" distributions (can be looked up while gathering facts) or multiple ones ( ...  == ["Debian", "Ubuntu"])
+    when: ansible_distribution == "Ubuntu"
 
   # Name of the task
-  - name: Install apache2 package
+  - name: Install apache2 package (apt)
     # Module
     apt:
       # Module argument(s)
       name: apache2
       # Get 'latest' version of the package or can specify 'absent' to remove package
       state: latest
+    when: ansible_distribution == "Ubuntu"
   
-  - name: Add php support for apache
+  - name: Add php support for apache (apt)
     apt:
       name: libapache2-mod-php
       state: latest
+    when: ansible_distribution == "Ubuntu"
+
+
+  # WARNING: Minimal install of CentOS missing `dnf` and other packages
+  # $ sudo yum install dnf epel-release ansible
+  - name: Update repository index (dnf)
+    dnf:
+      update_cache: true
+    when: ansible_distribution == "CentOS"
+
+  # CentOS needs couple more commands:
+  # $ sudo systemctl start httpd
+  # $ sudo firewall-cmd --add-port=80/tcp
+  - name: Install httpd package (dnf)
+    dnf:
+      name: httpd
+      state: latest
+    when: ansible_distribution == "CentOS"
+  
+  - name: Add php support for apache (dnf)
+    dnf:
+      name: php
+      state: latest
+    when: ansible_distribution == "CentOS"

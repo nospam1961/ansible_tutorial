@@ -132,3 +132,30 @@ or
 ### Install apache2 package
 
 `$ ansible-playbook --ask-become-pass install_apache.yml`
+
+## Multiple Linux distributions
+
+### Check for ansible_distribution
+
+`$ ansible all -m gather_facts --limit homelab-04 | grep ansible_distribution`
+
+```
+        "ansible_distribution": "CentOS",
+        "ansible_distribution_file_parsed": true,
+        "ansible_distribution_file_path": "/etc/redhat-release",
+        "ansible_distribution_file_variety": "RedHat",
+        "ansible_distribution_major_version": "7",
+        "ansible_distribution_release": "Core",
+        "ansible_distribution_version": "7.9",
+```
+
+### Use `when` to specify which tasks to run for which distribution (on the same lever as module name)
+
+```
+when: ansible_distribution == "CentOS"
+```
+
+```
+when: ansible_distribution == ["Debian", "Ubuntu"]
+```
+
