@@ -1,0 +1,88 @@
+---
+
+- hosts: all
+  become: yes
+  pre_tasks:  # run this pre_tasks before any other tasks
+
+  - name: Install updates (CentOS)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: Install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: Install apache and php package on Ubuntu
+    tags: apache,apache2,ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install apache and php package on CentOS
+    tags: apache,httpd,centos
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+  - name: Copy default html file for site
+    tags: apache,apache2,httpd
+    copy:
+      src: default_site.html  # directory name "files" is assumed
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: Install mariadb package (CentOS)
+    tags: db,mariadb,centos
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+  - name: Install mariadb package (Ubuntu)
+    tags: db,mariadb,ubuntu
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: Install samba package
+    tags: samba
+    package:
+      name: samba
+      state: latest
+
+
+  # - name: Install apache and php package
+  #   package:
+  #     name:
+  #       - "{{ apache_package }}"
+  #       - "{{ php_package }}"
+  #     state: latest
+  #     update_cache: yes
