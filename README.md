@@ -184,3 +184,16 @@ when: ansible_distribution == ["Debian", "Ubuntu"]
 `$ sudo systemctl start httpd`
 
 `$ sudo firewall-cmd --add-port=80/tcp`
+
+## Tags to run only certain playbooks
+
+### List playbook tags 
+
+`$ ansible-playbook --list-tags myplaybook.yml`
+
+### Run tasks with specific tags
+
+`$ ansible-playbook --tags centos --ask-become-pass myplaybook.yml`
+
+`$ ansible-playbook --tags "db,apache" --ask-become-pass myplaybook.yml`
+
