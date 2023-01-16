@@ -212,3 +212,11 @@ when: ansible_distribution == ["Debian", "Ubuntu"]
 ## Connect to test
 
 `$ ssh localhost`
+
+## Add to the inventory for localhost to avoid WSL interpreter discovery errors
+
+```
+[workstations]
+localhost ansible_python_interpreter="/usr/bin/python3"
+```
+
