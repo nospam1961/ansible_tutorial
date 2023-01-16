@@ -4,19 +4,33 @@
   become: yes
   pre_tasks:  # run this pre_tasks before any other tasks
 
-  - name: Install updates (CentOS)
+  - name: Update repo cache (CentOS)
     tags: always
     dnf:
-      update_only: yes
+      # update_only: yes
       update_cache: yes
+    changed_when: false # Don't consider this as a change
     when: ansible_distribution == "CentOS"
 
-  - name: Install updates (Ubuntu)
+  - name: Update repo cache (Ubuntu)
     tags: always
     apt:
-      upgrade: dist
+      # upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  tasks:
+
+  # Placeholder: This task duplicated in case key needs to be removed (state: absent) to be recreated again by bootstrap
+  - name: Add ssh key for simone
+    tags: always
+    authorized_key:
+      user: simone
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMdDmb/hw/qk2thNQ/X1vcoTYX0mnIMPsMBJi9ui57xU id_ansible"
+
 
 - hosts: workstations
   become: yes
