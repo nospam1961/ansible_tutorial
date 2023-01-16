@@ -8,4 +8,7 @@ homelab-02
 [file_servers]
 homelab-03
 
+[workstations]
+localhost ansible_python_interpreter="/usr/bin/python3"
+
 

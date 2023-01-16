@@ -197,3 +197,18 @@ when: ansible_distribution == ["Debian", "Ubuntu"]
 
 `$ ansible-playbook --tags "db,apache" --ask-become-pass myplaybook.yml`
 
+## Setting WSL2 (Ubuntu) as workstation 
+
+### More info on the subject [Scott Hanselman Blog](https://www.hanselman.com/blog/how-to-ssh-into-wsl2-on-windows-10-from-an-external-machine)
+
+### Install openssh-server, login, and start service
+
+`$ sudo apt install openssh-server && sudo service ssh start`
+
+### Copy a key with ssh-copy-id command 
+
+`$ ssh-copy-id -i ~/.ssh/id_ansible.pub localhost`
+
+## Connect to test
+
+`$ ssh localhost`
