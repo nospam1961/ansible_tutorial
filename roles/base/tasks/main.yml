@@ -1,0 +1,5 @@
+# Placeholder: This task duplicated in case key needs to be removed (state: absent) to be recreated again by bootstrap
+- name: Add ssh key for simone
+  authorized_key:
+    user: simone
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMdDmb/hw/qk2thNQ/X1vcoTYX0mnIMPsMBJi9ui57xU id_ansible"
